@@ -13,3 +13,4 @@ model.fit(xs, ys, epochs=100)
 
 x_input = np.array([10.0], dtype=float)
 print(model.predict(x_input))
+'asdfasdf'
