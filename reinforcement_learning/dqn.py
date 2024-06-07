@@ -46,6 +46,7 @@ class DQN:
         self.device = device
 
     def take_action(self, state):
+        print(state)
         if np.random.random() < self.epsilon:
             action = np.random.randint(self.action_dim)
         else:
@@ -100,7 +101,7 @@ batch_size = 64
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device(
     "cpu")
 
-env_name = 'Pendulum-v0'
+env_name = 'Pendulum-v1'
 env = gym.make(env_name)
 state_dim = env.observation_space.shape[0]
 action_dim = 11  # 将连续动作分成11个离散动作
@@ -125,6 +126,7 @@ def train_DQN(agent, env, num_episodes, replay_buffer, minimal_size,
             for i_episode in range(int(num_episodes / 10)):
                 episode_return = 0
                 state = env.reset()
+                print(state)
                 done = False
                 while not done:
                     action = agent.take_action(state)
@@ -162,7 +164,8 @@ def train_DQN(agent, env, num_episodes, replay_buffer, minimal_size,
 
 random.seed(0)
 np.random.seed(0)
-env.seed(0)
+obs, info = env.reset(seed=0)
+print(obs, info)
 torch.manual_seed(0)
 replay_buffer = rl_utils.ReplayBuffer(buffer_size)
 agent = DQN(state_dim, hidden_dim, action_dim, lr, gamma, epsilon,

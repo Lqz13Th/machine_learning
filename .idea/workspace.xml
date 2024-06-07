@@ -4,9 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="67d98ae7-701a-4bb4-818f-88ca79b0713d" name="Changes" comment="learn decision_tree with google example">
-      <change afterPath="$PROJECT_DIR$/reinforcement_learning/toy_dqn_model.py" afterDir="false" />
+    <list default="true" id="67d98ae7-701a-4bb4-818f-88ca79b0713d" name="Changes" comment="learn dqn">
+      <change afterPath="$PROJECT_DIR$/deep-reinforcement-learning-for-crypto-trading" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/environment_backup.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reinforcement_learning/ppo_toy_algo/crypto_data_parser.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reinforcement_learning/ppo_toy_algo/ppo_algo.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reinforcement_learning/ppo_toy_algo/ppo_crypto_trading.zip" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/machine_learning.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/machine_learning.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reinforcement_learning/dqn.py" beforeDir="false" afterPath="$PROJECT_DIR$/reinforcement_learning/dqn.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,10 +31,11 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="desicion_tree" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -56,22 +65,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.decision_tree_google.executor": "Run",
-    "Python.first_calss.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.toy_dqn_model.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/trade/PycharmProjects/machine_learning",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Python.decision_tree_google.executor&quot;: &quot;Run&quot;,
+    &quot;Python.dqn.executor&quot;: &quot;Run&quot;,
+    &quot;Python.dyna_q.executor&quot;: &quot;Run&quot;,
+    &quot;Python.dynamic_programming.executor&quot;: &quot;Run&quot;,
+    &quot;Python.filter.executor&quot;: &quot;Run&quot;,
+    &quot;Python.first_calss.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.markov_decision_process.executor&quot;: &quot;Run&quot;,
+    &quot;Python.multi_armed_bandit.executor&quot;: &quot;Run&quot;,
+    &quot;Python.ppo_algo.executor&quot;: &quot;Run&quot;,
+    &quot;Python.time_difference.executor&quot;: &quot;Run&quot;,
+    &quot;Python.toy_dqn_model.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;try__dqn&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/trade/AppData/Local/Programs/Python/Python312/python.exe&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
-  <component name="RunManager" selected="Python.toy_dqn_model">
-    <configuration name="decision_tree_google" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+}</component>
+  <component name="RunManager" selected="Python.ppo_algo">
+    <configuration name="dqn" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="machine_learning" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -80,11 +98,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ml_class/supervised_ml" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reinforcement_learning" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ml_class/supervised_ml/decision_tree_google.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reinforcement_learning/dqn.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -93,7 +111,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="first_calss" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="filter" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="machine_learning" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -102,11 +120,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ml_class/class_hello_world" />
+      <option name="WORKING_DIRECTORY" value="$USER_HOME$/anaconda3/envs/machine_learning/Lib/site-packages/ray/rllib/utils" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ml_class/class_hello_world/first_calss.py" />
+      <option name="SCRIPT_NAME" value="$USER_HOME$/anaconda3/envs/machine_learning/Lib/site-packages/ray/rllib/utils/filter.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -129,6 +147,50 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="multi_armed_bandit" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="machine_learning" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reinforcement_learning" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reinforcement_learning/multi_armed_bandit.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="ppo_algo" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="machine_learning" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reinforcement_learning/ppo_toy_algo" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reinforcement_learning/ppo_toy_algo/ppo_algo.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -161,9 +223,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.ppo_algo" />
+        <item itemvalue="Python.multi_armed_bandit" />
+        <item itemvalue="Python.filter" />
+        <item itemvalue="Python.dqn" />
         <item itemvalue="Python.toy_dqn_model" />
-        <item itemvalue="Python.first_calss" />
-        <item itemvalue="Python.decision_tree_google" />
       </list>
     </recent_temporary>
   </component>
@@ -215,7 +279,23 @@
       <option name="project" value="LOCAL" />
       <updated>1716627452723</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="learn dqn">
+      <option name="closed" value="true" />
+      <created>1717221394986</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1717221394986</updated>
+    </task>
+    <task id="LOCAL-00006" summary="learn dqn">
+      <option name="closed" value="true" />
+      <created>1717233888704</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1717233888704</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -242,9 +322,11 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Initial commit" />
     <MESSAGE value="nah" />
     <MESSAGE value="learn decision_tree with google example" />
-    <option name="LAST_COMMIT_MESSAGE" value="learn decision_tree with google example" />
+    <MESSAGE value="learn dqn" />
+    <option name="LAST_COMMIT_MESSAGE" value="learn dqn" />
   </component>
 </project>
