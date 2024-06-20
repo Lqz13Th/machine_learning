@@ -7,6 +7,8 @@ import torch.nn as nn
 from stable_baselines3 import PPO
 from stable_baselines3.common.env_util import make_vec_env
 
+import crypto_data_parser
+
 
 class CryptoTradingEnv(gym.Env):
     def __init__(self, data_frame):
@@ -14,15 +16,25 @@ class CryptoTradingEnv(gym.Env):
         self.df = data_frame
         self.current_step = 0
 
-        self.action_space = spaces.Discrete(3)  # 三种动作：保持，买入，卖出
-        self.observation_space = spaces.Box(low=0, high=1, shape=(10,), dtype=np.float32)
+        assert all(col in df.columns for col in [
+            'Open',
+            'High',
+            'Low',
+            'Close',
+            'Volume'
+        ]), "DataFrame should have columns: 'Open', 'High', 'Low', 'Close', 'Volume'"
 
-    def reset(self, seed=1, options=None):
+        self.action_space = spaces.Discrete(3)  # 三种动作：保持，买入，卖出
+        self.observation_space = spaces.Box(low=0, high=1, shape=(5,), dtype=np.float32)
+
+    def reset(self, seed=None):  # 添加 seed 参数
+        if seed is not None:
+            np.random.seed(seed)  # 例如，使用 NumPy 设置随机种子
         self.current_step = 0
         return self._next_observation(), {}
 
     def _next_observation(self):
-        observation_value = self.df.iloc[self.current_step]
+        observation_value = self.df.iloc[self.current_step][['Open', 'High', 'Low', 'Close', 'Volume']]
         return observation_value.values
 
     def step(self, action_state):
@@ -35,7 +47,7 @@ class CryptoTradingEnv(gym.Env):
 
         return current_obs, reward, terminated, truncated, {}
 
-    def render(self, mode='human', close=False):
+    def render(self, mode="rgb_array", close=False):
         pass
 
 
@@ -53,25 +65,42 @@ class PolicyNetwork(nn.Module):
         return x
 
 
-# 创建交易环境
-df = pd.read_csv('C:/Work Files/data/backtest/candle/candle1m/FET-USDT-SWAP1min.csv')
-env = make_vec_env(lambda: CryptoTradingEnv(df), n_envs=1)
+if __name__ == '__main__':
+    # plt.style.use('seaborn-v0_8')
+    pd.set_option("display.max_rows", 5000)
+    pd.set_option("expand_frame_repr", False)
 
-# 创建PPO模型
-model = PPO('MlpPolicy', env, verbose=1)
+    psd = crypto_data_parser.ParseCryptoData()
+    df = psd.parse_candle_data_okx('C:/Work Files/data/backtest/candle/candle1m/FIL-USDT1min.csv')
+    print(df)
 
-# 训练模型
-model.learn(total_timesteps=10000)
+    input_dim = 5  # 假设观测空间是(5,)，即Open, High, Low, Close, Volume
+    output_dim = 3
 
-# 保存模型
-model.save("ppo_crypto_trading")
+    # 创建交易环境
+    env = make_vec_env(lambda: CryptoTradingEnv(df), n_envs=1)
+    env.seed(seed=1)
+    # 创建PPO模型
+    model = PPO(
+        "MlpPolicy",
+        env,
+        verbose=1,
+    )
 
-# 加载模型
-model = PPO.load("ppo_crypto_trading")
+    # 训练模型
+    model.learn(total_timesteps=10000)
 
-# 运行和评估模型
-obs, info = env.reset()
-for _ in range(1000):
-    action, _states = model.predict(obs)
-    obs, rewards, dones, info = env.step(action)
-    env.render()
+    # 保存模型
+    model.save("ppo_crypto_trading")
+
+    # 加载模型
+    model = PPO.load("ppo_crypto_trading")
+
+    env.seed(seed=1)
+
+    # 运行和评估模型
+    obs = env.reset()
+    for _ in range(1000):
+        action, _states = model.predict(obs)
+        obs, rewards, dones, info = env.step(action)
+        # env.render()
