@@ -1,9 +1,9 @@
-import gymnasium as gym
-from gymnasium import spaces
 import numpy as np
 import pandas as pd
-import torch
-import torch.nn as nn
+import gymnasium as gym
+import matplotlib.pyplot as plt
+
+from gymnasium import spaces
 from stable_baselines3 import PPO
 from stable_baselines3.common.env_util import make_vec_env
 
@@ -15,6 +15,9 @@ class CryptoTradingEnv(gym.Env):
         super(CryptoTradingEnv, self).__init__()
         self.df = data_frame
         self.current_step = 0
+        self.initial_balance = 1000
+        self.balance = self.initial_balance
+        self.position = 0  # 持仓状态：0=空仓，1=持有
 
         assert all(col in df.columns for col in [
             'Open',
@@ -31,6 +34,8 @@ class CryptoTradingEnv(gym.Env):
         if seed is not None:
             np.random.seed(seed)  # 例如，使用 NumPy 设置随机种子
         self.current_step = 0
+        self.balance = self.initial_balance
+        self.position = 0
         return self._next_observation(), {}
 
     def _next_observation(self):
@@ -38,35 +43,37 @@ class CryptoTradingEnv(gym.Env):
         return observation_value.values
 
     def step(self, action_state):
+        self._take_action(action_state)
         self.current_step += 1
 
-        reward = 0
+        reward = self._calculate_reward()
         terminated = self.current_step >= len(self.df) - 1
-        truncated = False  # 可以根据需要添加截断逻辑
+        truncated = False
         current_obs = self._next_observation()
-
+        print(self.balance)
         return current_obs, reward, terminated, truncated, {}
 
-    def render(self, mode="rgb_array", close=False):
-        pass
+    def _take_action(self, action):
+        current_price = self.df.loc[self.current_step, 'Close']
 
+        if action == 1:  # 买入
+            if self.position == 0:
+                self.position = self.balance / current_price
+                self.balance = 0
+        elif action == 2:  # 卖出
+            if self.position > 0:
+                self.balance = self.position * current_price
+                self.position = 0
 
-class PolicyNetwork(nn.Module):
-    def __init__(self, input_dim, output_dim):
-        super(PolicyNetwork, self).__init__()
-        self.fc1 = nn.Linear(input_dim, 128)
-        self.fc2 = nn.Linear(128, 128)
-        self.fc3 = nn.Linear(128, output_dim)
-
-    def forward(self, x):
-        x = torch.relu(self.fc1(x))
-        x = torch.relu(self.fc2(x))
-        x = self.fc3(x)
-        return x
+    def _calculate_reward(self):
+        current_price = self.df.loc[self.current_step, 'Close']
+        total_value = self.balance + self.position * current_price
+        reward = total_value - self.initial_balance
+        return reward
 
 
 if __name__ == '__main__':
-    # plt.style.use('seaborn-v0_8')
+    plt.style.use('seaborn-v0_8')
     pd.set_option("display.max_rows", 5000)
     pd.set_option("expand_frame_repr", False)
 
@@ -74,33 +81,53 @@ if __name__ == '__main__':
     df = psd.parse_candle_data_okx('C:/Work Files/data/backtest/candle/candle1m/FIL-USDT1min.csv')
     print(df)
 
-    input_dim = 5  # 假设观测空间是(5,)，即Open, High, Low, Close, Volume
-    output_dim = 3
-
-    # 创建交易环境
     env = make_vec_env(lambda: CryptoTradingEnv(df), n_envs=1)
     env.seed(seed=1)
-    # 创建PPO模型
     model = PPO(
-        "MlpPolicy",
+        'MlpPolicy',
         env,
-        verbose=1,
+        verbose=2,
     )
 
-    # 训练模型
     model.learn(total_timesteps=10000)
 
-    # 保存模型
     model.save("ppo_crypto_trading")
+    del model
 
-    # 加载模型
     model = PPO.load("ppo_crypto_trading")
 
     env.seed(seed=1)
 
-    # 运行和评估模型
     obs = env.reset()
-    for _ in range(1000):
+
+    px_lst = []
+    pnl_lst = []
+    max_steps = df.index.max()
+    for i in range(max_steps):
         action, _states = model.predict(obs)
         obs, rewards, dones, info = env.step(action)
-        # env.render()
+        print(obs, rewards, i, max_steps)
+        if i % 10 == 0:
+            px_lst.append(obs[0][3])
+            pnl_lst.append(rewards[0])
+
+    fig, axs = plt.subplots(2, 2, figsize=(10, 8))
+
+    axs[0, 0].plot(px_lst)
+    axs[0, 0].set_title('px')
+
+    axs[0, 1].plot(pnl_lst)
+    axs[0, 1].set_title('pnl')
+
+    axs[1, 0].plot(px_lst)
+    axs[1, 0].set_title('pxs')
+
+    axs[1, 1].plot(pnl_lst)
+    axs[1, 1].set_title('fds')
+
+    plt.tight_layout()
+
+    plt.show()
+
+
+
