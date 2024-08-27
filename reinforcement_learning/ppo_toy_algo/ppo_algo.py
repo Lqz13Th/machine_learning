@@ -6,8 +6,31 @@ import matplotlib.pyplot as plt
 from gymnasium import spaces
 from stable_baselines3 import PPO
 from stable_baselines3.common.env_util import make_vec_env
+from stable_baselines3.common.callbacks import BaseCallback
 
 import crypto_data_parser
+
+
+class RewardLoggerCallback(BaseCallback):
+    def __init__(self, verbose=0):
+        super(RewardLoggerCallback, self).__init__(verbose)
+        self.episode_rewards = []
+
+    def _on_step(self) -> bool:
+        # Collect rewards from the environment
+        if self.num_timesteps % self.model.n_steps == 0:
+            env = self.model.get_env()
+            for _ in range(self.model.n_envs):
+                obs = env.reset()
+                done = False
+                total_reward = 0
+                while not done:
+                    action, _ = self.model.predict(obs)
+                    obs, reward, done, _ = env.step(action)
+                    total_reward += reward
+                self.episode_rewards.append(total_reward)
+            print(f"Step {self.num_timesteps}: Average Reward: {np.mean(self.episode_rewards)}")
+        return True
 
 
 class CryptoTradingEnv(gym.Env):
@@ -30,7 +53,7 @@ class CryptoTradingEnv(gym.Env):
         self.action_space = spaces.Discrete(3)  # 三种动作：保持，买入，卖出
         self.observation_space = spaces.Box(low=0, high=1, shape=(5,), dtype=np.float32)
 
-    def reset(self, seed=None):  # 添加 seed 参数
+    def reset(self, seed=1, a=None):  # 添加 seed 参数
         if seed is not None:
             np.random.seed(seed)  # 例如，使用 NumPy 设置随机种子
         self.current_step = 0
@@ -50,7 +73,6 @@ class CryptoTradingEnv(gym.Env):
         terminated = self.current_step >= len(self.df) - 1
         truncated = False
         current_obs = self._next_observation()
-        print(self.balance)
         return current_obs, reward, terminated, truncated, {}
 
     def _take_action(self, action):
@@ -80,6 +102,7 @@ if __name__ == '__main__':
     psd = crypto_data_parser.ParseCryptoData()
     df = psd.parse_candle_data_okx('C:/Work Files/data/backtest/candle/candle1m/FIL-USDT1min.csv')
     print(df)
+    max_steps = df.index.max()
 
     env = make_vec_env(lambda: CryptoTradingEnv(df), n_envs=1)
     env.seed(seed=1)
@@ -87,9 +110,18 @@ if __name__ == '__main__':
         'MlpPolicy',
         env,
         verbose=2,
+        n_steps=int(max_steps * 0.005),  # Number of steps to collect in each environment before updating
+        batch_size=256,  # Batch size used for optimization
+        n_epochs=10,
+        tensorboard_log="./ppo_crypto_trading_tensorboard/",
     )
 
-    model.learn(total_timesteps=10000)
+    reward_logger = RewardLoggerCallback()
+
+    model.learn(
+        total_timesteps=int(max_steps * 0.7),
+        # callback=reward_logger,
+    )
 
     model.save("ppo_crypto_trading")
     del model
@@ -102,31 +134,26 @@ if __name__ == '__main__':
 
     px_lst = []
     pnl_lst = []
-    max_steps = df.index.max()
     for i in range(max_steps):
-        action, _states = model.predict(obs)
-        obs, rewards, dones, info = env.step(action)
+        ppo_action, _states = model.predict(obs)
+        obs, rewards, dones, info = env.step(ppo_action)
         print(obs, rewards, i, max_steps)
         if i % 10 == 0:
             px_lst.append(obs[0][3])
             pnl_lst.append(rewards[0])
 
-    fig, axs = plt.subplots(2, 2, figsize=(10, 8))
+        if dones[0]:
+            break  # 完成后跳出
 
-    axs[0, 0].plot(px_lst)
-    axs[0, 0].set_title('px')
+    fig, axs = plt.subplots(2, 1, figsize=(10, 8))
 
-    axs[0, 1].plot(pnl_lst)
-    axs[0, 1].set_title('pnl')
+    axs[0].plot(px_lst)
+    axs[0].set_title('Price (Close)')
 
-    axs[1, 0].plot(px_lst)
-    axs[1, 0].set_title('pxs')
-
-    axs[1, 1].plot(pnl_lst)
-    axs[1, 1].set_title('fds')
+    axs[1].plot(pnl_lst)
+    axs[1].set_title('PnL (Reward)')
 
     plt.tight_layout()
-
     plt.show()
 
 
