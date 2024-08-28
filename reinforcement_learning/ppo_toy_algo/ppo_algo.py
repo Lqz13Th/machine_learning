@@ -11,26 +11,15 @@ from stable_baselines3.common.callbacks import BaseCallback
 import crypto_data_parser
 
 
-class RewardLoggerCallback(BaseCallback):
+class TensorboardCallback(BaseCallback):
     def __init__(self, verbose=0):
-        super(RewardLoggerCallback, self).__init__(verbose)
-        self.episode_rewards = []
+        super(TensorboardCallback, self).__init__(verbose)
 
     def _on_step(self) -> bool:
-        # Collect rewards from the environment
-        if self.num_timesteps % self.model.n_steps == 0:
-            env = self.model.get_env()
-            for _ in range(self.model.n_envs):
-                obs = env.reset()
-                done = False
-                total_reward = 0
-                while not done:
-                    action, _ = self.model.predict(obs)
-                    obs, reward, done, _ = env.step(action)
-                    total_reward += reward
-                self.episode_rewards.append(total_reward)
-            print(f"Step {self.num_timesteps}: Average Reward: {np.mean(self.episode_rewards)}")
-        return True
+        # 在每一步记录自定义信息, 比如奖励
+        reward = self.locals['rewards'][0]  # 当前环境的奖励
+        self.logger.record('train/reward', reward)  # 记录奖励到 TensorBoard
+        return True  # 如果返回 False 会提前停止训练
 
 
 class CryptoTradingEnv(gym.Env):
@@ -51,14 +40,15 @@ class CryptoTradingEnv(gym.Env):
         ]), "DataFrame should have columns: 'Open', 'High', 'Low', 'Close', 'Volume'"
 
         self.action_space = spaces.Discrete(3)  # 三种动作：保持，买入，卖出
-        self.observation_space = spaces.Box(low=0, high=1, shape=(5,), dtype=np.float32)
+        self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=(5,), dtype=np.float32)
 
-    def reset(self, seed=1, a=None):  # 添加 seed 参数
+    def reset(self, seed=1, n=None):  # 添加 seed 参数
         if seed is not None:
             np.random.seed(seed)  # 例如，使用 NumPy 设置随机种子
         self.current_step = 0
         self.balance = self.initial_balance
         self.position = 0
+
         return self._next_observation(), {}
 
     def _next_observation(self):
@@ -94,6 +84,15 @@ class CryptoTradingEnv(gym.Env):
         return reward
 
 
+def linear_schedule(initial_value, final_value=1e-5, steps=1e6):
+    """
+    Slower linear learning rate schedule that decays less aggressively.
+    """
+    def func(progress_remaining):
+        return max(final_value, initial_value * progress_remaining + (1 - progress_remaining) * final_value)
+    return func
+
+
 if __name__ == '__main__':
     plt.style.use('seaborn-v0_8')
     pd.set_option("display.max_rows", 5000)
@@ -102,34 +101,46 @@ if __name__ == '__main__':
     psd = crypto_data_parser.ParseCryptoData()
     df = psd.parse_candle_data_okx('C:/Work Files/data/backtest/candle/candle1m/FIL-USDT1min.csv')
     print(df)
+    old_max_steps = df.index.max()
+
+    df = df.tail(int(old_max_steps * 1)).reset_index(drop=True)
     max_steps = df.index.max()
+    print(df)
 
     env = make_vec_env(lambda: CryptoTradingEnv(df), n_envs=1)
-    env.seed(seed=1)
     model = PPO(
         'MlpPolicy',
         env,
         verbose=2,
-        n_steps=int(max_steps * 0.005),  # Number of steps to collect in each environment before updating
-        batch_size=256,  # Batch size used for optimization
+        learning_rate=linear_schedule(initial_value=3e-4, final_value=3e-4, steps=max_steps),
+        n_steps=max(int(max_steps * 0.005), 60*24*7),  # Number of steps to collect in each environment before updating
+        batch_size=64,  # Batch size used for optimization
         n_epochs=10,
+        gamma=0.99,
+        clip_range=linear_schedule(initial_value=0.2, final_value=0.2, steps=max_steps),
+        clip_range_vf=None,
+        normalize_advantage=True,
+        ent_coef=0.01,
+        vf_coef=0.5,
+        max_grad_norm=0.5,
+        use_sde=False,  # False for discrete actions
+        sde_sample_freq=-1,
+        target_kl=None,
+        stats_window_size=100,
+        seed=1,
+        device="auto",
         tensorboard_log="./ppo_crypto_trading_tensorboard/",
     )
 
-    reward_logger = RewardLoggerCallback()
-
     model.learn(
         total_timesteps=int(max_steps * 0.7),
-        # callback=reward_logger,
+        callback=TensorboardCallback(),  # 添加回调
     )
 
     model.save("ppo_crypto_trading")
     del model
 
     model = PPO.load("ppo_crypto_trading")
-
-    env.seed(seed=1)
-
     obs = env.reset()
 
     px_lst = []
@@ -137,7 +148,7 @@ if __name__ == '__main__':
     for i in range(max_steps):
         ppo_action, _states = model.predict(obs)
         obs, rewards, dones, info = env.step(ppo_action)
-        print(obs, rewards, i, max_steps)
+        # print(obs, rewards, i, max_steps)
         if i % 10 == 0:
             px_lst.append(obs[0][3])
             pnl_lst.append(rewards[0])
@@ -155,6 +166,3 @@ if __name__ == '__main__':
 
     plt.tight_layout()
     plt.show()
-
-
-
