@@ -5,11 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="67d98ae7-701a-4bb4-818f-88ca79b0713d" name="Changes" comment="new dir">
-      <change afterPath="$PROJECT_DIR$/reinforcement_learning/ppo_toy_algo/ppo_crypto_trading_tensorboard/PPO_1/events.out.tfevents.1724667749.Trading.52384.0" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ml_class/.ipynb_checkpoints/Lasso-checkpoint.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ml_class/price_percent_change_bar.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ml_class/supervised_ml/Lasso.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reinforcement_learning/a2c.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reinforcement_learning/ppo_algo/datas/candle_data_parser.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reinforcement_learning/ppo_algo/gyms/algo_one.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ml_class/toy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ml_class/toy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reinforcement_learning/ppo_toy_algo/ppo_algo.py" beforeDir="false" afterPath="$PROJECT_DIR$/reinforcement_learning/ppo_toy_algo/ppo_algo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reinforcement_learning/ppo_toy_algo/ppo_crypto_trading.zip" beforeDir="false" afterPath="$PROJECT_DIR$/reinforcement_learning/ppo_toy_algo/ppo_crypto_trading.zip" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,54 +66,38 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Python.decision_tree_google.executor&quot;: &quot;Run&quot;,
-    &quot;Python.dqn.executor&quot;: &quot;Run&quot;,
-    &quot;Python.dyna_q.executor&quot;: &quot;Run&quot;,
-    &quot;Python.dynamic_programming.executor&quot;: &quot;Run&quot;,
-    &quot;Python.filter.executor&quot;: &quot;Run&quot;,
-    &quot;Python.first_calss.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.markov_decision_process.executor&quot;: &quot;Run&quot;,
-    &quot;Python.multi_armed_bandit.executor&quot;: &quot;Run&quot;,
-    &quot;Python.ppo_algo.executor&quot;: &quot;Run&quot;,
-    &quot;Python.simple_trading_algo.executor&quot;: &quot;Run&quot;,
-    &quot;Python.time_difference.executor&quot;: &quot;Run&quot;,
-    &quot;Python.toy_dqn_model.executor&quot;: &quot;Run&quot;,
-    &quot;Python.toyppo.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;simple__algo__ppo&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/trade/AppData/Local/Programs/Python/Python312/python.exe&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Python.decision_tree_google.executor": "Run",
+    "Python.dqn.executor": "Run",
+    "Python.dyna_q.executor": "Run",
+    "Python.dynamic_programming.executor": "Run",
+    "Python.filter.executor": "Run",
+    "Python.first_calss.executor": "Run",
+    "Python.main.executor": "Run",
+    "Python.markov_decision_process.executor": "Run",
+    "Python.multi_armed_bandit.executor": "Run",
+    "Python.ppo_algo.executor": "Run",
+    "Python.price_percent_change_bar.executor": "Run",
+    "Python.simple_trading_algo.executor": "Run",
+    "Python.time_difference.executor": "Run",
+    "Python.toy_dqn_model.executor": "Run",
+    "Python.toyppo.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/trade/AppData/Local/Programs/Python/Python312/python.exe",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
-  <component name="RunManager" selected="Python.ppo_algo">
-    <configuration name="dqn" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="machine_learning" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reinforcement_learning" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reinforcement_learning/dqn.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\trade\PycharmProjects\machine_learning\ml_class\supervised_ml" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.price_percent_change_bar">
     <configuration name="filter" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="machine_learning" />
       <option name="ENV_FILES" value="" />
@@ -199,6 +186,28 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="price_percent_change_bar" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="machine_learning" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ml_class" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ml_class/price_percent_change_bar.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="toy_dqn_model" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="machine_learning" />
       <option name="ENV_FILES" value="" />
@@ -223,11 +232,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.price_percent_change_bar" />
         <item itemvalue="Python.ppo_algo" />
         <item itemvalue="Python.toy_dqn_model" />
         <item itemvalue="Python.multi_armed_bandit" />
         <item itemvalue="Python.filter" />
-        <item itemvalue="Python.dqn" />
       </list>
     </recent_temporary>
   </component>
