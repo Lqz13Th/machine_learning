@@ -4,15 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="67d98ae7-701a-4bb4-818f-88ca79b0713d" name="Changes" comment="new dir">
-      <change afterPath="$PROJECT_DIR$/ml_class/.ipynb_checkpoints/Lasso-checkpoint.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ml_class/price_percent_change_bar.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ml_class/supervised_ml/Lasso.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reinforcement_learning/a2c.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reinforcement_learning/ppo_algo/datas/candle_data_parser.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reinforcement_learning/ppo_algo/gyms/algo_one.py" afterDir="false" />
+    <list default="true" id="67d98ae7-701a-4bb4-818f-88ca79b0713d" name="Changes" comment="finish price percent change bar">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ml_class/toy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ml_class/toy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep-reinforcement-learning-for-crypto-trading" beforeDir="false" afterPath="$PROJECT_DIR$/deep-reinforcement-learning-for-crypto-trading" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep-reinforcement-learning-for-crypto-trading/envs/gym_space_builder.py" beforeDir="false" afterPath="$PROJECT_DIR$/deep-reinforcement-learning-for-crypto-trading/envs/gym_space_builder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ml_class/price_percent_change_bar.py" beforeDir="false" afterPath="$PROJECT_DIR$/ml_class/price_percent_change_bar.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ml_class/supervised_ml/Lasso.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/ml_class/supervised_ml/Lasso.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,6 +92,7 @@
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\trade\PycharmProjects\machine_learning\ml_class\supervised_ml" />
+      <recent name="C:\Users\trade\PycharmProjects\machine_learning\ml_class" />
     </key>
   </component>
   <component name="RunManager" selected="Python.price_percent_change_bar">
@@ -320,7 +318,23 @@
       <option name="project" value="LOCAL" />
       <updated>1719042932008</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="work on px pct change bar">
+      <option name="closed" value="true" />
+      <created>1727261683119</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1727261683119</updated>
+    </task>
+    <task id="LOCAL-00010" summary="finish price percent change bar">
+      <option name="closed" value="true" />
+      <created>1727334762730</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1727334762730</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -355,6 +369,8 @@
     <MESSAGE value="delete subbranch" />
     <MESSAGE value="finish toy model" />
     <MESSAGE value="new dir" />
-    <option name="LAST_COMMIT_MESSAGE" value="new dir" />
+    <MESSAGE value="work on px pct change bar" />
+    <MESSAGE value="finish price percent change bar" />
+    <option name="LAST_COMMIT_MESSAGE" value="finish price percent change bar" />
   </component>
 </project>
