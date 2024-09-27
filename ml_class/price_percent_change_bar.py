@@ -58,10 +58,10 @@ def generate_px_pct_bar(
 
     bars_df = pd.DataFrame(bars)
     bars_df['future_price_pct_change'] = bars_df['price'].shift(-window) / bars_df['price'] - 1
-    bars_df = bars_df.dropna()
     bars_df['scaled_sigmoid_future_price_pct_change'] = bars_df['future_price_pct_change'].apply(
         lambda x: scaled_sigmoid(x, -threshold * float(window), threshold * float(window))
     )
+    bars_df = bars_df.dropna()
     return bars_df
 
 
@@ -78,7 +78,7 @@ def normalize_data(df: pd.DataFrame) -> pd.DataFrame:
         lambda x: scaled_sigmoid(x, 0, 100_000)
     )
     df_normalized['scaled_sigmoid_timestamp_duration'] = df_normalized['timestamp_duration'].apply(
-        lambda x: scaled_sigmoid(x, 0, 60_000)
+        lambda x: scaled_sigmoid(x, 0, 600_000)
     )
     df_normalized['scaled_sigmoid_price_pct_change'] = df_normalized['price_pct_change'].apply(
         lambda x: scaled_sigmoid(x, -1., 1.)
@@ -98,7 +98,7 @@ if __name__ == "__main__":
 
     px_pct_bar = generate_px_pct_bar(
         df=agg_trade_data,
-        threshold=0.01,
+        threshold=0.001,
         window=3,
     )
 
