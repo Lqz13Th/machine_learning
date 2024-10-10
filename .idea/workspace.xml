@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="67d98ae7-701a-4bb4-818f-88ca79b0713d" name="Changes" comment="add tqdm into generate px pct bar">
-      <change afterPath="$PROJECT_DIR$/ml_class/normalizer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ml_class/supervised_ml/.ipynb_checkpoints/Lasso-checkpoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ml_class/price_percent_change_bar.py" beforeDir="false" afterPath="$PROJECT_DIR$/ml_class/price_percent_change_bar.py" afterDir="false" />
+    <list default="true" id="67d98ae7-701a-4bb4-818f-88ca79b0713d" name="Changes" comment="daily learning">
+      <change afterPath="$PROJECT_DIR$/ml_class/factors/crypto_factors.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ml_class/factors/factors_from_Clyde.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ml_class/supervised_ml/Lasso.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/ml_class/supervised_ml/Lasso.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reinforcement_learning/ppo_toy_algo/ppo_crypto_trading.zip" beforeDir="false" afterPath="$PROJECT_DIR$/reinforcement_learning/ppo_toy_algo/ppo_crypto_trading.zip" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,6 +66,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Python.crypto_factors.executor": "Run",
     "Python.decision_tree_google.executor": "Run",
     "Python.dqn.executor": "Run",
     "Python.dyna_q.executor": "Run",
@@ -95,7 +97,29 @@
       <recent name="C:\Users\trade\PycharmProjects\machine_learning\ml_class" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.normalizer">
+  <component name="RunManager" selected="Python.crypto_factors">
+    <configuration name="crypto_factors" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="machine_learning" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ml_class/factors" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ml_class/factors/crypto_factors.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="machine_learning" />
       <option name="ENV_FILES" value="" />
@@ -110,28 +134,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="multi_armed_bandit" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="machine_learning" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/reinforcement_learning" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reinforcement_learning/multi_armed_bandit.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -230,11 +232,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.normalizer" />
-        <item itemvalue="Python.price_percent_change_bar" />
+        <item itemvalue="Python.crypto_factors" />
         <item itemvalue="Python.ppo_algo" />
+        <item itemvalue="Python.price_percent_change_bar" />
+        <item itemvalue="Python.normalizer" />
         <item itemvalue="Python.toy_dqn_model" />
-        <item itemvalue="Python.multi_armed_bandit" />
       </list>
     </recent_temporary>
   </component>
@@ -342,7 +344,31 @@
       <option name="project" value="LOCAL" />
       <updated>1727338537547</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="add">
+      <option name="closed" value="true" />
+      <created>1727345599191</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1727345599191</updated>
+    </task>
+    <task id="LOCAL-00013" summary="add scaled sigmoid normalization method">
+      <option name="closed" value="true" />
+      <created>1727345634347</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1727345634347</updated>
+    </task>
+    <task id="LOCAL-00014" summary="daily learning">
+      <option name="closed" value="true" />
+      <created>1727432806834</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1727432806834</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -380,6 +406,8 @@
     <MESSAGE value="work on px pct change bar" />
     <MESSAGE value="finish price percent change bar" />
     <MESSAGE value="add tqdm into generate px pct bar" />
-    <option name="LAST_COMMIT_MESSAGE" value="add tqdm into generate px pct bar" />
+    <MESSAGE value="add scaled sigmoid normalization method" />
+    <MESSAGE value="daily learning" />
+    <option name="LAST_COMMIT_MESSAGE" value="daily learning" />
   </component>
 </project>
