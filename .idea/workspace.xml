@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="67d98ae7-701a-4bb4-818f-88ca79b0713d" name="Changes" comment="daily learning">
-      <change afterPath="$PROJECT_DIR$/ml_class/factors/crypto_factors.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ml_class/factors/factors_from_Clyde.py" afterDir="false" />
+    <list default="true" id="67d98ae7-701a-4bb4-818f-88ca79b0713d" name="Changes" comment="add basic factors">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ml_class/supervised_ml/Lasso.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/ml_class/supervised_ml/Lasso.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reinforcement_learning/ppo_toy_algo/ppo_crypto_trading.zip" beforeDir="false" afterPath="$PROJECT_DIR$/reinforcement_learning/ppo_toy_algo/ppo_crypto_trading.zip" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -368,7 +365,15 @@
       <option name="project" value="LOCAL" />
       <updated>1727432806834</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="add basic factors">
+      <option name="closed" value="true" />
+      <created>1728551258960</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1728551258960</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -408,6 +413,7 @@
     <MESSAGE value="add tqdm into generate px pct bar" />
     <MESSAGE value="add scaled sigmoid normalization method" />
     <MESSAGE value="daily learning" />
-    <option name="LAST_COMMIT_MESSAGE" value="daily learning" />
+    <MESSAGE value="add basic factors" />
+    <option name="LAST_COMMIT_MESSAGE" value="add basic factors" />
   </component>
 </project>
