@@ -17,18 +17,20 @@ def scaled_sigmoid(x, start, end):
 def plot_scaled_sigmoid():
     fig, (ax1, ax2, ax3, ax4) = plt.subplots(nrows=1, ncols=4, figsize=(12, 3))
 
-    x = np.linspace(-1, 1)
+    x = np.linspace(-0, 1)
     ax1.plot(x, [scaled_sigmoid(i, x[0], x[-1]) for i in x])
     ax1.set_title("fit (0,1)")
     ax1.grid()
+    print(x, [scaled_sigmoid(i, x[0], x[-1]) for i in x])
 
-    x = np.linspace(0, 100)
+    x = np.linspace(-89, 100)
+    x = (x - np.mean(x)) / np.std(x)
     print(x)
-    ax2.plot(x, [scaled_sigmoid(i, x[0], x[-1]) for i in x])
+    ax2.plot(x, [scaled_sigmoid(i, -2.5, 2.5) for i in x])
     ax2.set_title("fit (0, 100)")
     ax2.grid()
 
-    x = np.linspace(18, 38)
+    x = np.linspace(-18, 38)
     ax3.plot(x, [scaled_sigmoid(i, x[0], x[-1]) for i in x])
     ax3.set_title("fit (18, 38)")
     ax3.grid()

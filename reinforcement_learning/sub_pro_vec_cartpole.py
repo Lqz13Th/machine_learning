@@ -24,7 +24,7 @@ if __name__ == '__main__':
     model = PPO("MlpPolicy", env, verbose=1)
 
     # 训练模型
-    model.learn(total_timesteps=1000000)
+    model.learn(total_timesteps=100000)
 
     # 测试训练后的模型
     obs = env.reset()
