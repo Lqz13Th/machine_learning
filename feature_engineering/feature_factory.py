@@ -1,11 +1,30 @@
 import polars as pl
 import numpy as np
-from typing import List, Union
+from typing import List
 
-from numpy.linalg import LinAlgError
-from sklearn.feature_selection import mutual_info_regression
-from statsmodels.api import OLS, add_constant
+def kalman_filter_series(
+        series: pl.Series,
+        R: float = 0.01,  # 观测噪声协方差（越小越信）
+        Q: float = 1e-5   # 过程噪声协方差（越小越稳）
+) -> pl.Series:
+    z = series.to_numpy()
+    n = len(z)
+    x_hat = np.zeros(n)      # 估计值
+    P = np.zeros(n)          # 估计误差协方差
+    x_hat[0] = z[0]
+    P[0] = 1.0
 
+    for k in range(1, n):
+        # 预测更新
+        x_hat_minus = x_hat[k - 1]
+        P_minus = P[k - 1] + Q
+
+        # 观测更新
+        K = P_minus / (P_minus + R)  # 卡尔曼增益
+        x_hat[k] = x_hat_minus + K * (z[k] - x_hat_minus)
+        P[k] = (1 - K) * P_minus
+
+    return pl.Series(name=f"{series.name}_kalman", values=x_hat)
 
 # 判断序列是收敛、发散还是混沌系统：
 def lyapunov_series(s: pl.Series, window: int) -> pl.Series:
@@ -16,7 +35,6 @@ def lyapunov_series(s: pl.Series, window: int) -> pl.Series:
         lyap = np.mean(np.log(np.abs(np.diff(x)) + 1e-8))
         out[i] = lyap
     return pl.Series(name=f"{s.name}_lyap_{window}", values=out)
-
 
 def fft_power_topk_series(series: pl.Series, window: int = 64, k: int = 3) -> pl.Series:
     values = series.to_list()
@@ -43,6 +61,7 @@ def batch_apply_single_series(
     for col in cols:
         df_col_series = df_single_series_cal[col]
         single_series.extend([
+            kalman_filter_series(df_col_series),
             lyapunov_series(df_col_series, window),
             fft_power_topk_series(df_col_series, window),
         ])
@@ -51,7 +70,6 @@ def batch_apply_single_series(
 
 def squared_expr(col: str) -> pl.Expr:
     return (pl.col(col) ** 2).alias(f"{col}_squared")
-
 
 def rolling_volatility_expr(col: str, window: int) -> pl.Expr:
     return pl.col(col).rolling_std(window).alias(f"{col}_volatility_{window}")
@@ -77,7 +95,6 @@ def second_order_diff_expr(col: str, lag: int = 1) -> pl.Expr:
     second_diff = first_diff - first_diff.shift(lag)
     return second_diff.alias(f"{col}_second_order_diff_{lag}")
 
-
 def momentum_ratio_expr(col: str, lag: int = 200) -> pl.Expr:
     # 动量比率 = x_t / x_{t-lag}
     return (pl.col(col) / (pl.col(col).shift(lag) + 1e-8)).alias(f"{col}_momentum_ratio_{lag}")
@@ -91,12 +108,6 @@ def inverse_expr(col: str) -> pl.Expr:
 def abs_expr(col: str) -> pl.Expr:
     return pl.col(col).abs().alias(f"{col}_abs")
 
-def rolling_skew_shift_expr(col: str, window: int) -> pl.Expr:
-    return (
-        (pl.col(col).rolling_skew(window) - pl.col(col).rolling_skew(window).shift(1))
-        .alias(f"{col}_skew_shift_{window}")
-    )
-
 def cross_product_expr(a: str, b: str) -> pl.Expr:
     return (pl.col(a) * pl.col(b)).alias(f"{a}_X_{b}")
 
@@ -104,20 +115,19 @@ def cross_div_expr(a: str, b: str) -> pl.Expr:
     return (pl.col(a) / (pl.col(b) + 1e-8)).alias(f"{a}_DIV_{b}")
 
 def spread_product_expr(a: str, b: str) -> pl.Expr:
-    return ((pl.col(a) - pl.col(b)) * (pl.col(a) + pl.col(b))).alias(f"{a}_SPREAD_X_MAG_{b}")
+    col_a = pl.col(a)
+    col_b = pl.col(b)
+    max_col = pl.when(col_a >= col_b).then(col_a).otherwise(col_b)
+    min_col = pl.when(col_a < col_b).then(col_a).otherwise(col_b)
+    return ((max_col - min_col) * (col_a + col_b)).alias(f"{a}_SPREAD_X_MAG_{b}")
 
-def conditioned_cross_expr_rolling(a: str, b: str, window: int) -> pl.Expr:
+def conditioned_cross_expr(a: str, b: str, window: int) -> pl.Expr:
     mean_col = pl.col(a).rolling_mean(window)
-    std_col = pl.col(a).rolling_std(window)
-    upper = mean_col + std_col
-    lower = mean_col - std_col
+    deviation = pl.col(a) - mean_col
 
-    return (
-        pl.when((pl.col(a) > upper) | (pl.col(a) < lower))
-        .then(pl.col(a) * pl.col(b))
-        .otherwise(0.0)
-        .alias(f"{a}_X_{b}_cond_dev_rolling{window}")
-    )
+    weighted = deviation * pl.col(b)
+    return weighted.alias(f"{a}_X_{b}_conditioned_cross_rolling{window}")
+
 
 def cols_to_transforms(
         df: pl.DataFrame,
@@ -155,13 +165,12 @@ def batch_apply_single_exprs(
             rolling_volatility_expr(col, window),
             rolling_skew_expr(col, window),
             rolling_kurt_expr(col, window),
-            diff_expr(col, lag),
-            second_order_diff_expr(col, lag),
+            diff_expr(col),
+            second_order_diff_expr(col),
             momentum_ratio_expr(col, lag),
             lag_expr(col, lag),
             inverse_expr(col),
             abs_expr(col),
-            rolling_skew_shift_expr(col, window),
         ])
 
     return single_exprs
@@ -180,7 +189,7 @@ def batch_apply_multi_exprs(
                 cross_product_expr(a, b),
                 cross_div_expr(a, b),
                 spread_product_expr(a, b,),
-                conditioned_cross_expr_rolling(a, b, window),
+                conditioned_cross_expr(a, b, window),
             ])
 
     return multi_exprs
