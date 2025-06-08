@@ -733,6 +733,85 @@ def features_automation(
         del mo_df
         gc.collect()
 
+def rolling_ic_ir_icto_index(
+        df: pl.DataFrame,
+        target_col: str,
+        exclude_prefixes: list[str],
+        window_size: int,
+        step: int = 1,
+) -> pl.DataFrame:
+    feature_cols = [
+        col for col in df.columns
+        if col.endswith("_scaled")
+           and all(not col.startswith(prefix) for prefix in exclude_prefixes)
+           and not col.startswith("future_return_")
+           and col != "price"
+    ]
+
+    n = df.height
+    results = []
+    prev_ranks = {}
+
+    for start in tqdm(range(0, n - window_size + 1, step), desc="Rolling IC & ICTO"):
+        end = start + window_size
+        df_win = df.slice(start, window_size)
+
+        # rank 转换
+        df_ranked = df_win.with_columns([
+            (pl.col(c).rank(method="average") / window_size).alias(c + "_rank") for c in feature_cols + [target_col]
+        ])
+        target_rank_col = target_col + "_rank"
+
+        for feat in feature_cols:
+            feat_rank_col = feat + "_rank"
+            ic = df_ranked.select(
+                pl.corr(pl.col(feat_rank_col), pl.col(target_rank_col)).alias("ic")
+            ).to_series()[0]
+
+            turnover = None
+            if feat in prev_ranks:
+                cur_ranks = df_ranked[feat_rank_col].to_numpy()
+                prev = prev_ranks[feat]
+                if len(prev) == len(cur_ranks):
+                    turnover = np.mean(np.abs(cur_ranks - prev))
+
+            # 更新 prev_ranks
+            prev_ranks[feat] = df_ranked[feat_rank_col].to_numpy()
+
+            results.append({
+                "window_start": int(start),
+                "window_end": int(end - 1),
+                "factor": str(feat),
+                "ic": float(ic) if not np.isnan(ic) else None,
+                "turnover": float(turnover) if turnover is not None else None
+            })
+
+    df_result = pl.DataFrame(
+        results,
+        schema={
+            "window_start": pl.Int64,
+            "window_end": pl.Int64,
+            "factor": pl.Utf8,
+            "ic": pl.Float64,
+            "turnover": pl.Float64,
+        }
+    )
+
+    return (
+        df_result
+        .group_by("factor")
+        .agg([
+            pl.mean("ic").alias("mean_ic"),
+            pl.std("ic").alias("std_ic"),
+            pl.mean("turnover").alias("mean_turnover")
+        ])
+        .with_columns([
+            (pl.col("mean_ic") / pl.col("std_ic")).alias("ir"),
+            (pl.col("mean_ic") / (pl.col("mean_turnover") + 1e-8)).abs().alias("icto")
+        ])
+        .sort("icto", descending=True)
+    )
+
 
 def calculate_half_life(signal_series: pl.Series):
     df = pl.DataFrame({
