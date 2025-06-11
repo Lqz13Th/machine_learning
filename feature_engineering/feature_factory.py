@@ -68,24 +68,6 @@ def batch_apply_single_series(
 
     return single_series
 
-def squared_expr(col: str) -> pl.Expr:
-    return (pl.col(col) ** 2).alias(f"{col}_squared")
-
-def rolling_volatility_expr(col: str, window: int) -> pl.Expr:
-    return pl.col(col).rolling_std(window).alias(f"{col}_volatility_{window}")
-
-def rolling_skew_expr(col: str, window: int) -> pl.Expr:
-    mean = pl.col(col).rolling_mean(window)
-    std = pl.col(col).rolling_std(window) + 1e-8
-    m3 = ((pl.col(col) - mean) ** 3).rolling_mean(window)
-    return (m3 / (std ** 3)).alias(f"{col}_skew")
-
-def rolling_kurt_expr(col: str, window: int) -> pl.Expr:
-    mean = pl.col(col).rolling_mean(window)
-    std = pl.col(col).rolling_std(window) + 1e-8
-    m4 = ((pl.col(col) - mean) ** 4).rolling_mean(window)
-    return (m4 / (std ** 4)).alias(f"{col}_kurt")
-
 def diff_expr(col: str, lag: int = 1) -> pl.Expr:
     return (pl.col(col) - pl.col(col).shift(lag)).alias(f"{col}_diff_{lag}")
 
@@ -99,35 +81,18 @@ def momentum_ratio_expr(col: str, lag: int = 200) -> pl.Expr:
     # 动量比率 = x_t / x_{t-lag}
     return (pl.col(col) / (pl.col(col).shift(lag) + 1e-8)).alias(f"{col}_momentum_ratio_{lag}")
 
-def lag_expr(col: str, lag: int = 200) -> pl.Expr:
-    return pl.col(col).shift(lag).alias(f"{col}_lag_{lag}")
+def rolling_volatility_expr(col: str, window: int) -> pl.Expr:
+    return pl.col(col).rolling_std(window).alias(f"{col}_volatility_{window}")
 
-def inverse_expr(col: str) -> pl.Expr:
-    return (1 / (pl.col(col) + 1e-8)).alias(f"{col}_inverse")
+def lag_exprs(col: str, lags: List[int]) -> List[pl.Expr]:
+    return [
+        pl.col(col).shift(lag).alias(f"{col}_lag_{lag}")
+        for lag in lags
+    ]
 
-def abs_expr(col: str) -> pl.Expr:
-    return pl.col(col).abs().alias(f"{col}_abs")
-
-def cross_product_expr(a: str, b: str) -> pl.Expr:
-    return (pl.col(a) * pl.col(b)).alias(f"{a}_X_{b}")
 
 def cross_div_expr(a: str, b: str) -> pl.Expr:
     return (pl.col(a) / (pl.col(b) + 1e-8)).alias(f"{a}_DIV_{b}")
-
-def spread_product_expr(a: str, b: str) -> pl.Expr:
-    col_a = pl.col(a)
-    col_b = pl.col(b)
-    max_col = pl.when(col_a >= col_b).then(col_a).otherwise(col_b)
-    min_col = pl.when(col_a < col_b).then(col_a).otherwise(col_b)
-    return ((max_col - min_col) * (col_a + col_b)).alias(f"{a}_SPREAD_X_MAG_{b}")
-
-def conditioned_cross_expr(a: str, b: str, window: int) -> pl.Expr:
-    mean_col = pl.col(a).rolling_mean(window)
-    deviation = pl.col(a) - mean_col
-
-    weighted = deviation * pl.col(b)
-    return weighted.alias(f"{a}_X_{b}_conditioned_cross_rolling{window}")
-
 
 def cols_to_transforms(
         df: pl.DataFrame,
@@ -161,22 +126,16 @@ def batch_apply_single_exprs(
     # single features transformation
     for col in cols:
         single_exprs.extend([
-            squared_expr(col),
-            rolling_volatility_expr(col, window),
-            rolling_skew_expr(col, window),
-            rolling_kurt_expr(col, window),
             diff_expr(col),
             second_order_diff_expr(col),
             momentum_ratio_expr(col, lag),
-            lag_expr(col, lag),
-            inverse_expr(col),
-            abs_expr(col),
+            rolling_volatility_expr(col, window),
+            lag_exprs(col, [10, 20, 50, 100, 200, 500]),
         ])
 
     return single_exprs
 
 def batch_apply_multi_exprs(
-        window: int,
         cols: List[str] = None
 ) -> List[str]:
     multi_exprs = []
@@ -186,10 +145,7 @@ def batch_apply_multi_exprs(
         for j in range(i + 1, n):
             a, b = cols[i], cols[j]
             multi_exprs.extend([
-                cross_product_expr(a, b),
                 cross_div_expr(a, b),
-                spread_product_expr(a, b,),
-                conditioned_cross_expr(a, b, window),
             ])
 
     return multi_exprs
@@ -209,7 +165,7 @@ def batch_apply_transforms(
     df_to_transforms = df_to_transforms.with_columns(series)
 
     single_exprs = batch_apply_single_exprs(window, lag, base_cols)
-    multi_exprs = batch_apply_multi_exprs(window, base_cols)
+    multi_exprs = batch_apply_multi_exprs(base_cols)
 
     exprs = single_exprs + multi_exprs
     return df_to_transforms.with_columns(exprs)
