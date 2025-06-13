@@ -633,6 +633,35 @@ def rolling_minmax_normalize(rollin_df: pl.DataFrame, window: int) -> pl.DataFra
         .drop(intermediate_cols)
     )
 
+def rolling_mean_tanh_scaled_expr(
+        col: str,
+        scaled_col: str,
+        window: int
+) -> pl.Expr:
+    return (
+        pl.col(col)
+        .rolling_mean(window, min_samples=1)
+        .tanh()
+        .rolling_mean(window, min_samples=1)
+        .alias(scaled_col)
+    )
+
+def rolling_mean_tanh_normalize(rollin_df: pl.DataFrame, window: int) -> pl.DataFrame:
+    columns_to_normalize = [
+        col for col in rollin_df.columns
+        if col not in ['px', 'timestamp', 'timestamp_dt', 'symbol']
+           and not col.startswith("future_return_")
+           and not col.endswith('_scaled')
+    ]
+
+    return rollin_df.with_columns([
+        rolling_mean_tanh_scaled_expr(
+            col=column,
+            scaled_col=f"{column}_scaled",
+            window=window
+        ) for column in columns_to_normalize
+    ])
+
 def features_automation(
     input_df_path: str,
 ):
