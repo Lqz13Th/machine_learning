@@ -101,9 +101,7 @@ def batch_apply_transforms(
 ) -> pl.DataFrame:
     base_cols = cols_to_transforms(df_to_transforms, exclude_cols)
 
-    single_exprs = batch_apply_single_exprs(window, lag, base_cols)
-    multi_exprs = batch_apply_multi_exprs(base_cols)
+    exprs = batch_apply_single_exprs(window, lag, base_cols)
 
-    exprs = single_exprs + multi_exprs
-    return df_to_transforms.with_columns(single_exprs)
+    return df_to_transforms.with_columns(exprs)
 
