@@ -1,2 +1,4 @@
 /reinforcement_learning/ppo_toy_algo/ppo_crypto_trading_tensorboard/
 .idea
+/ml_class/wandb/
+/ml_class/titanic/
